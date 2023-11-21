@@ -1,6 +1,7 @@
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Movie extends Media
 {
@@ -16,29 +17,37 @@ public class Movie extends Media
     // Laver getters igen
     public String getTitle()
     {
-        return title;
+            Scanner scan = new Scanner("src/100bedstefilm");
+            movieSeparator().subList(0,1);
+            scan.hasNextLine();
+            return title;
+
     }
     public String getGenre()
     {
+        Scanner scan = new Scanner("src/100bedstefilm");
+        movieSeparator().subList(1,2);
+        scan.hasNextLine();
         return genre;
     }
 
     public double getRating()
     {
+        Scanner scan = new Scanner("src/100bedstefilm");
+        movieSeparator().subList(2,3);
+        scan.hasNextLine();
         return rating;
     }
 
     public String getReleaseDate()
     {
-        //---------------bruge movieSeparator/List<Movie>movieList og bare tag fat i row 1 ???--------------
+        Scanner scan = new Scanner("src/100bedstefilm");
+        movieSeparator().subList(3,4);
+        scan.hasNextLine();
         return releaseDate;
     }
 
-    @Override
-    public String toString() // Bruger super toString fra Media
-    {
-        return super.toString();
-    }
+
 
 
     public List<Movie> movieSeparator() {
@@ -55,10 +64,19 @@ public class Movie extends Media
         return movieList;
     }
 
-    private void registerMovies(String title, String releaseDate,String genre, double rating) {
+    public void registerMovies(String title, String releaseDate,String genre, double rating) {
         Movie movie=new Movie(title,releaseDate,genre,rating);
         movieList.add(movie);
 
+    }
+
+
+
+    @Override
+    public String toString() // Bruger super toString fra Media
+    {
+
+        return super.toString();
     }
 
 }
