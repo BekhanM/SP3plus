@@ -29,19 +29,21 @@ public class StreamingService {
         } else if (i.equals("2")) {
             addUser();
         } else {
-            ui.displayMessage("Forkert valg. Vælg funktion 1 eller 2.");
+            ui.displayMessage("Forkert valg. Vælg funktion.");
             startMenu();
         }
     }
 
     public void mainMenu() {
-        String i = ui.getInput("Du har følgende valgmuligheder:" +
-                "\n1) Vis listen over alle film" +
-                "\n2) Søge efter en bestemt film" +
-                "\n3) Søge alle film i en kategori" +
-                "\n4) Se din liste over sete film" +
-                "\n5) Se din liste over gemte film" +
-                "\n6) logout");
+        String i = ui.getInput("\nDu har følgende valgmuligheder:" +
+                "\n1) Vis listen over alle medier" +
+                "\n2) Vælg/søg efter en bestemt medie" +
+                "\n3) Vælg/søg medie i en kategori" +
+                "\n4) Se din liste over sete medier" +
+                "\n5) Se din liste over gemte medier" +
+                "\n6) logud" +
+                "\n7) Luk programmet");
+
         if (i.equals("1")) {
             displayMovies();
         }
@@ -54,12 +56,20 @@ public class StreamingService {
         }
         if (i.equals("4")) {
             displayWatchedList();
+            mainMenu();
         }
         if (i.equals("5")) {
             displayMyList();
+            mainMenu();
         }
         if (i.equals("6")) {
             logout();
+        }
+        if (i.equals("7")) {
+            System.exit(0);
+        } else {
+            ui.displayMessage("Forkert valg. Vælg funktion.");
+            mainMenu();
         }
     }
 
@@ -98,12 +108,20 @@ public class StreamingService {
         String userInputUsername = ui.getInput("Indtast et nyt brugernavn: ");
         if (dataValidator.checkRegisterUsername(userData, userInputUsername)) {
             String userInputPassword = ui.getInput("Indsæt ønskede kodeord\nKodeord skal minimum være 8 karakterer, skal have et tal og et stort bogstav");
-            dataValidator.validatePassword(userInputPassword);
-            String userInputPassword2 = ui.getInput("Gentag kodeord");
-            if (userInputPassword.equals(userInputPassword2)) {
-                registerUser(userInputUsername, userInputPassword);
-                ui.displayMessage("Du er nu registreret som bruger:");
-                startMenu();
+            boolean validpassword = dataValidator.validatePassword(userInputPassword);
+            if (validpassword) {
+                String userInputPassword2 = ui.getInput("Gentag kodeord");
+                if (userInputPassword.equals(userInputPassword2)) {
+                    registerUser(userInputUsername, userInputPassword);
+                    ui.displayMessage("Du er nu registreret som bruger:");
+                    startMenu();
+                } else {
+                    ui.displayMessage("Forkert gentaget kodeord");
+                    addUser();
+                }
+            } else if (!validpassword) {
+                ui.displayMessage("Ugyldigt kodeord");
+                addUser();
             }
         } else {
             addUser();

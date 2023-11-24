@@ -1,8 +1,6 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class DataValidator {
-    Scanner scanner = new Scanner(System.in);
     TextUI ui = new TextUI();
 
     // Tjekker om en String (password) indeholder minimum et stort bogstav
