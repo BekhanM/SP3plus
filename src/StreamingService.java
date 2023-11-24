@@ -2,24 +2,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StreamingService {
-    private String userInputUsername;
     Movie movie = new Movie("", "", "", 0);
     Series series = new Series("", "", "", 0, "", "");
     MediaContent mediaContent = new MediaContent("", "", "", 0, "", "");
-    private List<Movie> movies = movie.movieSeparator();
-    private List<Series> serie = series.seriesSeparator();
-    private List<MediaContent> mediaContents = mediaContent.mediaContentSeparator();
-    private List<String> genreList = new ArrayList<>();
-    private FileIO io = new FileIO();
-    private ArrayList<String> userData = io.readUserData();
-    private ArrayList<String> movieData = io.readMovieData();
-    private ArrayList<String> seriesData = io.readSeriesData();
-    private ArrayList<String> mediaContentData = io.readMediaData();
-    private DataValidator dataValidator = new DataValidator();
-    private ArrayList<User> users = new ArrayList<>();
-    private TextUI ui = new TextUI();
-    private List<Content> content;
-    private MyList myList = new MyList();
+    private String userInputUsername;
+    private String userInputPassword;
+    private final List<MediaContent> mediaContents = mediaContent.mediaContentSeparator();
+    private final List<Movie> movieContents = movie.movieSeparator();
+    private final List<String> genreList = new ArrayList<>();
+    private final FileIO io = new FileIO();
+    private final ArrayList<String> userData = io.readUserData();
+    private final ArrayList<String> mediaContentData = io.readMediaData();
+    private final DataValidator dataValidator = new DataValidator();
+    private final ArrayList<User> users = new ArrayList<>();
+    private final TextUI ui = new TextUI();
+    private final MyList myList = new MyList();
+    private final WatchedList watchedList = new WatchedList();
 
     public void startMenu() {
         ui.displayMessage("Hej og velkommen til landets værste streamingtjeneste");
@@ -75,7 +73,7 @@ public class StreamingService {
     }
 
     public void loginPassword(String user) {
-        String userInputPassword = ui.getInput("Kodeord: ");
+        userInputPassword = ui.getInput("Kodeord: ");
         if (dataValidator.checkLoginPassword(userData, userInputPassword)) {
             ui.displayMessage("Du er nu logget ind som: " + user);
             mainMenu();
@@ -87,7 +85,6 @@ public class StreamingService {
     public void logout() {
         String i = ui.getInput("Er du sikker du vil logge ud, bro?\nTast 1 hvis du gerne vil logge ud:\nTast 2 hvis du ikke vil logge ud:");
         if (i.equals("1")) {
-            io.saveMyListData(userInputUsername,myList.getMyList());
             startMenu();
         } else if (i.equals("2")) {
             mainMenu();
@@ -201,7 +198,6 @@ public class StreamingService {
     }
 */
     public void displayMediaContent() {
-        // Use the existing mediaContents list
         for (MediaContent mc : mediaContents) {
             System.out.println(mc);
         }
@@ -283,6 +279,8 @@ public class StreamingService {
                 found = true;
             }
         }
+        searchByName();
+
 
         if (!found) {
             mediaNotFoundOptions();
@@ -306,23 +304,41 @@ public class StreamingService {
                 "\n3) Go back to main menu");
 
         if (userInput.equals("1")) {
-            ui.displayMessage("*Playing media*");
+            watchedList.addToWatchedList(mediaContents.get(mediaContents.indexOf(m)));
+            io.saveWatchedListData(userInputUsername, watchedList.getWatchedList());
+
+            String s = ui.getInput("*Afspiller medie*\n" +
+                    "Tryk 1 for at pause\n" +
+                    "Tryk 2 for at forlade");
+            if (s.equals("1")) {
+                String f = ui.getInput("Medie er på pause\n" +
+                        "Tryk 1 for at gentage\n" +
+                        "Tryk 2 for at forlade");
+                if (f.equals("1")) {
+                    ui.displayMessage("*Afspiller medie*");
+                } else if (f.equals("2")) {
+                    mainMenu();
+                }
+            }
         }
+
         if (userInput.equals("2")) {
-            myList.addToMyList(mediaContents.get(mediaContents.indexOf(m))); // skal ikke hardcodes
-            ui.displayMessage("Media successfully added: " + m);
+            myList.addToMyList(mediaContents.get(mediaContents.indexOf(m)));
+            io.saveMyListData(userInputUsername, myList.getMyList());
+            ui.displayMessage("Medie tilføjet: " + m);
             mediaOptions(m);
         }
+
         if (userInput.equals("3")) {
             mainMenu();
         }
     }
 
     public void mediaNotFoundOptions() {
-        String input = ui.getInput("Select an option:" +
-                "\n1) Display our catalog" +
-                "\n2) Search again" +
-                "\n)3 Go back to main menu");
+        String input = ui.getInput("Vælg en funktion:" +
+                "\n1) Fremvis vores katalog" +
+                "\n2) Søg igen" +
+                "\n)3 Gå tilbage til hovedmenu");
         if (input.equalsIgnoreCase("1")) {
             displayMovies();
         } else if (input.equalsIgnoreCase("2")) {

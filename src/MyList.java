@@ -22,5 +22,4 @@ public class MyList {
     public ArrayList<MediaContent> getMyList() {
         return myList;
     }
-
 }

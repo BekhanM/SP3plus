@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class FileIO implements IO {
 
-
     @Override
     public ArrayList<String> readUserData() {
         ArrayList<String> userData = new ArrayList<>();
@@ -23,26 +22,27 @@ public class FileIO implements IO {
         return userData;
     }
 
+
     public void saveUserData(ArrayList<User> users) {
         try {
             File file = new File("src/UserBase");
-            boolean fileExists = file.exists();
+            //boolean fileExists = file.exists();
 
             FileWriter writer = new FileWriter(file, true); // true flag for append mode
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            //BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
             // If the file doesn't exist or is empty, add headers
-            if (!fileExists || file.length() == 0) {
-                bufferedWriter.write("Username,Password" + "\n");
+            if (!file.exists() || file.length() == 0) {
+                writer.write("Username,Password" + "\n");
             }
 
             // Append new data
             for (User c : users) {
                 String textToSave = c.getUsername() + "," + c.getPassword();
-                bufferedWriter.write(textToSave + "\n");
+                writer.write(textToSave + "\n");
             }
-
-            bufferedWriter.close();
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             System.out.println("Something went wrong while writing to the file");
         }
@@ -110,27 +110,61 @@ public class FileIO implements IO {
         ArrayList<String> savedData = new ArrayList<>();
         try {
             File f = new File("UserMyList/userMyList_" + username + ".txt");
-            FileWriter writer = new FileWriter(f,true);
-            if (!f.exists()) {
-                f.createNewFile();
-                for (MediaContent s : saveData) {
-                    MediaContent textToSave = s;
-                    writer.write(String.valueOf(textToSave + "\n"));
-                    savedData.add(String.valueOf(textToSave));
-                }
-                System.out.println("has been added to new file");
-                writer.close();
-            } else if (f.exists()) {
-                for (MediaContent s : saveData) {
-                    MediaContent textToSave = s;
-                    writer.write(String.valueOf(textToSave + "\n"));
-                    savedData.add(String.valueOf(textToSave));
-                    System.out.println("Has been added to existing file");
-                }
-                writer.close();
+            FileWriter writer = new FileWriter(f, true);
+            for (MediaContent s : saveData) {
+                writer.write(s + "\n");
+                savedData.add(String.valueOf(s));
             }
+            writer.close();
         } catch (IOException e) {
             System.out.println("Something went wrong while writing to the file");
         }
+    }
+
+    public void saveWatchedListData(String username, ArrayList<MediaContent> saveData) {
+        ArrayList<String> savedData = new ArrayList<>();
+        try {
+            File f = new File("UserWatchedList/userWatchedList_" + username + ".txt");
+            FileWriter writer = new FileWriter(f, true);
+            for (MediaContent s : saveData) {
+                writer.write(String.valueOf(s + "\n"));
+                savedData.add(String.valueOf(s));
+                }
+            writer.close();
+        } catch (IOException e) {
+            ui.displayMessage("Something went wrong while writing to the file");
+        }
+    }
+
+    public ArrayList<String> readMyWatchedList(String username, ArrayList<String> readsMyWatchedList) {
+        ArrayList<String> watchedListData = new ArrayList<>();
+        File file = new File("UserWatchedList/userWatchedList_" + username + ".txt");
+        try {
+            Scanner scan = new Scanner(file);
+
+            while (scan.hasNextLine()) {
+                String s = scan.nextLine();
+                watchedListData.add(s);
+            }
+        } catch (FileNotFoundException e) {
+            ui.displayMessage("file not found");
+        }
+        return watchedListData;
+    }
+
+    public ArrayList<String> readMyList(String username, ArrayList<String> readsMyList) {
+        ArrayList<String> myListData = new ArrayList<>();
+        File file = new File("UserMyList/userMyList_" + username + ".txt");
+        try {
+            Scanner scan = new Scanner(file);
+
+            while (scan.hasNextLine()) {
+                String s = scan.nextLine();
+                myListData.add(s);
+            }
+        } catch (FileNotFoundException e) {
+            ui.displayMessage("file not found");
+        }
+        return myListData;
     }
 }
