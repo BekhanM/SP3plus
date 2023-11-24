@@ -3,9 +3,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Series extends Media {
-    private List<Series>seriesList = new ArrayList<>(); // skal bruges til separationsmetoden
-    private String season;
-    private String episode;
+    private final List<Series>seriesList = new ArrayList<>(); // skal bruges til separationsmetoden
+    private final String season;
+    private final String episode;
 
 
     public Series(String title,String releaseDate, String genre, double rating, String season, String episode) {

@@ -182,14 +182,14 @@ public class StreamingService {
         for (int i = 0; i < genreList.size(); i++) {
             output = output + genreList.get(i) + "\n";
         }
-        System.out.println(output);
+        ui.displayMessage(output);
     }
 
     public void displayMovies() {
         //-----------Printer listen af movies i en pen format------------
         List<Movie> movies = movie.movieSeparator();
         for (Movie m : movies) {
-            System.out.println(m);
+            ui.displayMessage(m.toString());
         }
     }
 
@@ -197,7 +197,7 @@ public class StreamingService {
         //-----------Printer listen af SERIES i en pen format------------
         List<Series> serie = series.seriesSeparator();
         for (Series s : serie) {
-            System.out.println(s);
+            ui.displayMessage(s.toString());
         }
     }
 
@@ -217,11 +217,11 @@ public class StreamingService {
 */
     public void displayMediaContent() {
         for (MediaContent mc : mediaContents) {
-            System.out.println(mc);
+            ui.displayMessage(mc.toString());
         }
 
         if (mediaContents.isEmpty()) {
-            System.out.println("Nixen bixen");
+            ui.displayMessage("Nixen bixen");
         }
     }
 
@@ -260,14 +260,6 @@ public class StreamingService {
 
         }
     }
-
-    public void searchByReleaseDate() { //NICETOHAVE
-
-    }
-
-    public void searchByRating() { // NICE TO HAVE
-    }
-
 
     public void searchByGenre() {
         displayGenre();

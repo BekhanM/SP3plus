@@ -1,7 +1,3 @@
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class Media
 {
     protected String title; // Måske ikke protected kan lige se på det senere

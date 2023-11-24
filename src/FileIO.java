@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileIO implements IO {
+    TextUI ui = new TextUI();
 
     @Override
     public ArrayList<String> readUserData() {
@@ -16,7 +17,7 @@ public class FileIO implements IO {
                 userData.add(s);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("file not found");
+            ui.displayMessage("file not found");
         }
 
         return userData;
@@ -44,7 +45,7 @@ public class FileIO implements IO {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            System.out.println("Something went wrong while writing to the file");
+            ui.displayMessage("Something went wrong while writing to the file");
         }
     }
 
@@ -61,9 +62,8 @@ public class FileIO implements IO {
                 movieData.add(s);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("file not found");
+            ui.displayMessage("file not found");
         }
-
         return movieData;
     }
 
@@ -81,9 +81,8 @@ public class FileIO implements IO {
                 seriesData.add(s);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("file not found");
+            ui.displayMessage("file not found");
         }
-
         return seriesData;
     }
 
@@ -100,9 +99,8 @@ public class FileIO implements IO {
                 mediaData.add(s);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("file not found");
+            ui.displayMessage("file not found");
         }
-
         return mediaData;
     }
 
@@ -117,7 +115,7 @@ public class FileIO implements IO {
             }
             writer.close();
         } catch (IOException e) {
-            System.out.println("Something went wrong while writing to the file");
+            ui.displayMessage("Something went wrong while writing to the file");
         }
     }
 
