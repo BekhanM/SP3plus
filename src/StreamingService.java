@@ -45,7 +45,7 @@ public class StreamingService {
                 "\n7) Luk programmet");
 
         if (i.equals("1")) {
-            displayMovies();
+            displayMediaContent();
         }
         if (i.equals("2")) {
             searchByName();
@@ -201,20 +201,7 @@ public class StreamingService {
         }
     }
 
-    /*
-    public void displayMediaContent() {
-        //-----------Printer listen af movies og series i en pen format------------
-        List<MediaContent> mediaContents = mediaContent.mediaContentSeparator();
 
-        for (MediaContent mc : mediaContents) {
-            System.out.println(mc);
-        }
-        if(mediaContents.isEmpty()){
-            System.out.println("Nixen bixen");
-
-        }
-    }
-*/
     public void displayMediaContent() {
         for (MediaContent mc : mediaContents) {
             ui.displayMessage(mc.toString());
@@ -226,7 +213,7 @@ public class StreamingService {
     }
 
     public void searchByName() {
-        String input = ui.getInput("Type to search titles");
+        String input = ui.getInput("Indtast navn på titler for at vælge/søge");
         String[] inputTitles = input.split(", "); // Split the user input into an array of genres
 
         boolean found = false;
@@ -248,7 +235,7 @@ public class StreamingService {
             }
 
             if (matchFound) {
-                ui.displayMessage("Media found: ");
+                ui.displayMessage("Medie fundet: ");
                 ui.displayMessage(m.toString());
                 mediaOptions(m);
                 found = true;
@@ -262,8 +249,7 @@ public class StreamingService {
     }
 
     public void searchByGenre() {
-        displayGenre();
-        String input = ui.getInput("Type to search in genre");
+        String input = ui.getInput("Indtast genrenavn for at søge i genre");
         String[] inputGenres = input.split(", "); // Split the user input into an array of genres
 
         boolean found = false;
@@ -300,18 +286,34 @@ public class StreamingService {
 
 
     public void displayWatchedList() {
+        ui.displayMessage("\nDu har set: ");
+        for (String userWatchedList : io.readMyWatchedList(userInputUsername, mediaContentData)) {
+            io.saveMyListData(userInputUsername, watchedList.getWatchedList());
+            ui.displayMessage(userWatchedList);
+        }
 
+        if (mediaContents.isEmpty()) {
+            ui.displayMessage("Nixen Bixen");
+        }
     }
 
     public void displayMyList() {
-
+        ui.displayMessage("\nDu har tilføjet følgende til din liste: ");
+        for (String userMyList : io.readMyList(userInputUsername, mediaContentData)) {
+            io.saveMyListData(userInputUsername, myList.getMyList());
+            ui.displayMessage(userMyList);
         }
+        if (mediaContents.isEmpty()) {
+            ui.displayMessage("Nixen bixen");
+        }
+    }
+
 
     public void mediaOptions(Media m) {
-        String userInput = ui.getInput("\nPick a function:" +
-                "\n1) Play selected media" +
-                "\n2) Add media to My List" +
-                "\n3) Go back to main menu");
+        String userInput = ui.getInput("\nVælg en funktion:" +
+                "\n1) Afspil valgte medie" +
+                "\n2) Tilføj medie til min liste" +
+                "\n3) Gå tilbage til main menu");
 
         if (userInput.equals("1")) {
             watchedList.addToWatchedList(mediaContents.get(mediaContents.indexOf(m)));
